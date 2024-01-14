@@ -1,0 +1,228 @@
+basePath: /api
+definitions:
+  dtos.BasicLoginRequestJSONDTO:
+    properties:
+      identifier:
+        description: '`json:"identifier"`'
+        type: string
+      password:
+        description: '`json:"password"`'
+        type: string
+    type: object
+  handlers.RegisterUserErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  handlers.RegisterUserResponseData:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      payment_link:
+        type: string
+      profile_picture_url:
+        type: string
+    type: object
+  handlers.RegisterUserSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.RegisterUserResponseData'
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  handlers.UpdateUserProfileErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  handlers.UpdateUserProfileResponseData:
+    properties:
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      profile_picture_url:
+        type: string
+    type: object
+  handlers.UpdateUserProfileSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.UpdateUserProfileResponseData'
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber Example API
+  version: "1.0"
+paths:
+  /login/basic:
+    post:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: login user
+      parameters:
+      - description: 'identifier: email or member number'
+        in: formData
+        name: identifier
+        type: string
+      - description: password
+        in: formData
+        name: password
+        type: string
+      - description: date of birth
+        in: body
+        name: jsonData
+        schema:
+          $ref: '#/definitions/dtos.BasicLoginRequestJSONDTO'
+      - description: profile picture
+        in: formData
+        name: profile_picture
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+      summary: login user
+      tags:
+      - accounts
+  /me/edit:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Update user
+      parameters:
+      - description: first name
+        in: formData
+        name: first_name
+        type: string
+      - description: last name
+        in: formData
+        name: last_name
+        type: string
+      - description: date of birth
+        in: formData
+        name: dob
+        type: string
+      - description: profile picture
+        in: formData
+        name: profile_picture
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+      summary: Update user
+      tags:
+      - accounts
+  /users/register:
+    post:
+      consumes:
+      - multipart/form-data
+      description: register user
+      parameters:
+      - description: member number
+        in: formData
+        maxLength: 10
+        minLength: 5
+        name: member_number
+        required: true
+        type: string
+      - description: email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: first name
+        in: formData
+        name: first_name
+        required: true
+        type: string
+      - description: last name
+        in: formData
+        name: last_name
+        required: true
+        type: string
+      - description: profile picture
+        in: formData
+        name: profile_picture
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.RegisterUserSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.RegisterUserErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.RegisterUserErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.RegisterUserErrorResponse'
+      summary: Register user
+      tags:
+      - accounts
+swagger: "2.0"
