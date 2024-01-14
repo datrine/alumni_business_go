@@ -3,6 +3,7 @@ package dtos
 import "time"
 
 type UpdateUserProfileCommandData struct {
+	ID                string
 	FirstName         string
 	LastName          string
 	Profession        *string

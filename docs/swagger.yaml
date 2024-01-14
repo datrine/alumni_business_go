@@ -49,11 +49,15 @@ definitions:
     type: object
   handlers.UpdateUserProfileResponseData:
     properties:
+      dob:
+        type: string
       first_name:
         type: string
       id:
         type: string
       last_name:
+        type: string
+      profession:
         type: string
       profile_picture_url:
         type: string

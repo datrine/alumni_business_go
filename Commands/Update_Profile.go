@@ -6,11 +6,13 @@ import (
 )
 
 func UpdateUserProfile(data *dtos.UpdateUserProfileCommandData) (*entities.User, error) {
-	/**/ user, err := entities.GetUserByID("")
+	/**/ user, err := entities.GetUserByID(data.ID)
 	if err != nil {
 		return nil, err
 	}
+	println(user)
 	return user.UpdateUserProfile(&dtos.UpdateUserProfileCommandData{
+		ID:                data.ID,
 		FirstName:         data.FirstName,
 		LastName:          data.LastName,
 		Education:         data.Education,

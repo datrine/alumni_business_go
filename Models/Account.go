@@ -3,6 +3,8 @@ package models
 import (
 	"database/sql"
 	"time"
+
+	"github.com/lib/pq"
 )
 
 type Account struct {
@@ -12,14 +14,14 @@ type Account struct {
 	Password          string
 	FirstName         string
 	LastName          string
-	Profession        sql.NullString
-	JobTitle          sql.NullString
-	Education         []string `gorm:"json"`
-	Certifications    []string `gorm:"json"`
-	Employer          sql.NullString
-	Industry          sql.NullString
-	Location          sql.NullString
-	Skills            []string `gorm:"json"`
+	Profession        *string
+	JobTitle          *string
+	Education         pq.StringArray `gorm:"type:text[]"`
+	Certifications    pq.StringArray `gorm:"type:text[]"`
+	Employer          *string
+	Industry          *string
+	Location          *string
+	Skills            pq.StringArray `gorm:"type:text[]"`
 	ProfilePictureUrl string
 	GraduationYear    int
 	Has_Subscribed    bool `gorm:"default:false"`

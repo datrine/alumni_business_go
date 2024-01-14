@@ -2,6 +2,7 @@ package entities
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	dtos "github.com/datrine/alumni_business/Dtos/Command"
@@ -63,13 +64,13 @@ func GetUserEntityFromAccountModel(model *models.Account) *User {
 		Email:             model.Email,
 		LastName:          model.LastName,
 		FirstName:         model.FirstName,
-		Profession:        &model.Profession.String,
-		JobTitle:          &model.JobTitle.String,
+		Profession:        model.Profession,
+		JobTitle:          model.JobTitle,
 		Education:         model.Education,
 		Certifications:    model.Certifications,
-		Employer:          &model.Employer.String,
-		Industry:          &model.Industry.String,
-		Location:          &model.Location.String,
+		Employer:          model.Employer,
+		Industry:          model.Industry,
+		Location:          model.Location,
 		Skills:            model.Skills,
 		ProfilePictureUrl: model.ProfilePictureUrl,
 		GraduationYear:    model.GraduationYear,
@@ -103,15 +104,24 @@ func BasicLogin(id *BasicLoginData) (*User, error) {
 }
 
 func (userToAdd *User) UpdateUserProfile(data *dtos.UpdateUserProfileCommandData) (*User, error) {
-	id := userToAdd.ID
+	id := data.ID
 	account := &models.Account{
 		ID: id,
 	}
-	result := providers.DB.Model(account).Omit("id", "email", "password", "member_number").Updates(data)
+	fmt.Println("\n", data, "\n")
+	result := providers.DB.Model(account).
+		Omit("id", "email", "password", "member_number").
+		Updates(models.Account{
+			LastName:   data.LastName,
+			FirstName:  data.FirstName,
+			Profession: data.Profession,
+			JobTitle:   data.JobTitle,
+		})
 	err := result.Error
 	if err != nil {
 		return nil, err
 	}
+
 	return GetUserEntityFromAccountModel(account), nil
 }
 

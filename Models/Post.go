@@ -13,7 +13,7 @@ type Post struct {
 	AuthorId    string
 	Title       string
 	Content     string
-	Comments    *[]Comment `gorm:"foreignKey:ParentPostId"`
+	Comments    []Comment `gorm:"foreignKey:ParentPostId"`
 	ContentType string
 	ActivatedAt sql.NullTime // Uses sql.NullTime for nullable time fields
 	CreatedAt   time.Time    // Automatically managed by GORM for creation time

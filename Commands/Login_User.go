@@ -26,6 +26,10 @@ func BasicLogin(data *dtos.BasicLoginCommandDTO) (*AuthUserEntity, error) {
 		"name": strings.Join([]string{userEntity.FirstName, userEntity.LastName}, " "),
 		"role": userEntity.Role,
 		"exp":  time.Now().Add(time.Hour * 72).Unix(),
+		"sub": &JWTPayload{
+			Email: userEntity.Email,
+			ID:    userEntity.ID,
+		},
 	}
 
 	// Create token
@@ -37,4 +41,9 @@ func BasicLogin(data *dtos.BasicLoginCommandDTO) (*AuthUserEntity, error) {
 	authUser := &AuthUserEntity{User: userEntity, Token: tokenString}
 
 	return authUser, nil
+}
+
+type JWTPayload struct {
+	ID    string
+	Email string
 }

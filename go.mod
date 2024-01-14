@@ -10,6 +10,7 @@ require (
 	github.com/gofiber/swagger v0.1.14
 	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/jaevor/go-nanoid v1.3.0
+	github.com/lib/pq v1.10.9
 	github.com/matcornic/hermes/v2 v2.1.0
 	github.com/rs/xid v1.5.0
 	github.com/subosito/gotenv v1.6.0

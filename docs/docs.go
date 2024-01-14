@@ -317,6 +317,9 @@ const docTemplate = `{
         "handlers.UpdateUserProfileResponseData": {
             "type": "object",
             "properties": {
+                "dob": {
+                    "type": "string"
+                },
                 "first_name": {
                     "type": "string"
                 },
@@ -324,6 +327,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "last_name": {
+                    "type": "string"
+                },
+                "profession": {
                     "type": "string"
                 },
                 "profile_picture_url": {
