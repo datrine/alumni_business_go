@@ -16,12 +16,12 @@ type Account struct {
 	LastName          string
 	Profession        *string
 	JobTitle          *string
-	Education         pq.StringArray `gorm:"type:text[]"`
-	Certifications    pq.StringArray `gorm:"type:text[]"`
+	Education         pq.StringArray `gorm:"type:json"`
+	Certifications    pq.StringArray `gorm:"type:json"`
 	Employer          *string
 	Industry          *string
 	Location          *string
-	Skills            pq.StringArray `gorm:"type:text[]"`
+	Skills            pq.StringArray `gorm:"type:json"`
 	ProfilePictureUrl string
 	GraduationYear    int
 	Has_Subscribed    bool `gorm:"default:false"`

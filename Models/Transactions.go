@@ -14,7 +14,7 @@ type Transaction struct {
 	Amount     string
 	Currency   string
 	Platform   string
-	Metadata   interface{} `gorm:"type:string"`
+	Metadata   interface{} `gorm:"type:json"`
 	Status     string
 	CreatedAt  time.Time // Automatically managed by GORM for creation time
 	UpdatedAt  time.Time // Automatically managed by GORM for update time

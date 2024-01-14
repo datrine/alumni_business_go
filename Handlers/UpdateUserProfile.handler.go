@@ -81,9 +81,9 @@ func UpdateUserProfile(c *fiber.Ctx) error {
 		}
 		err = validate.Struct(data)
 		if err != nil {
-			return c.Status(fiber.StatusBadGateway).JSON(&RegisterUserErrorResponse{
+			return c.Status(fiber.StatusBadRequest).JSON(&RegisterUserErrorResponse{
 				Message: err.Error(),
-				Status:  fiber.StatusBadGateway,
+				Status:  fiber.StatusBadRequest,
 			})
 		}
 		user := c.Locals("user").(*jwt.Token)

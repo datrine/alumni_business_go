@@ -33,9 +33,10 @@ func RegisterUser(data *dtos.RegisterUserCommandDTO) (*UserEntityWithPaystackLin
 	if err != nil {
 		return nil, err
 	}
-	paystackJSON, err := paystack.GeneratePaymentLink(&paystack.PaystackTransactionRequestJSON{
-		Email:  data.Email,
-		Amount: "60000",
+	paystackJSON, err := paystack.GeneratePaymentLink(&paystack.GeneratePaymentLinkDTO{
+		PayerEmail: user.Email,
+		Amount:     "60000",
+		PayerID:    user.ID,
 	})
 
 	if err != nil {
