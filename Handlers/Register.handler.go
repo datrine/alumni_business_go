@@ -42,7 +42,6 @@ func Register(c *fiber.Ctx) error {
 		firstName := c.FormValue("first_name")
 		lastName := c.FormValue("last_name")
 		email := c.FormValue("email")
-		password := c.FormValue("password")
 		profilePictureFile, err := c.FormFile("profile_picture")
 		if err != nil {
 			return c.Status(fiber.ErrBadGateway.Code).JSON(&RegisterUserErrorResponse{
@@ -69,7 +68,6 @@ func Register(c *fiber.Ctx) error {
 			FirstName:         firstName,
 			LastName:          lastName,
 			ProfilePictureUrl: profilePictureUrl,
-			Password:          password,
 		}
 		err = validate.Struct(data)
 		if err != nil {
@@ -95,7 +93,7 @@ func Register(c *fiber.Ctx) error {
 		}
 		return c.Status(fiber.StatusCreated).JSON(&RegisterUserSuccessResponse{
 			Message: "user registered successfully",
-			Code:    fiber.StatusCreated,
+			Status:  fiber.StatusCreated,
 			Data: &RegisterUserResponseData{
 				ID:                entityUser.User.ID,
 				FirstName:         entityUser.User.FirstName,
@@ -120,6 +118,6 @@ type RegisterUserResponseData struct {
 
 type RegisterUserSuccessResponse struct {
 	Message string                    `json:"message"`
-	Code    int                       `json:"status"`
+	Status  int                       `json:"status"`
 	Data    *RegisterUserResponseData `json:"data"`
 }

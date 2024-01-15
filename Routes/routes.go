@@ -13,7 +13,8 @@ func Routes(app *fiber.App) fiber.Router {
 	api := app.Group("/api")
 	api.Post("/users/register", handlers.Register)
 	api.Post("/login/basic", handlers.Login)
-	authApi := api.Group("/auth")
-	authApi.Post("/me/edit", middleware.Auth, handlers.UpdateUserProfile)
+	api.Get("/generate_payment_link", handlers.GeneratePaystackLink)
+	authApi := api.Group("/auth", middleware.Auth)
+	authApi.Post("/me/edit", handlers.UpdateUserProfile)
 	return api
 }

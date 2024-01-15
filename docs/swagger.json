@@ -17,11 +17,10 @@
     "host": "localhost:3000",
     "basePath": "/api",
     "paths": {
-        "/login/basic": {
+        "/auth/me/edit": {
             "post": {
-                "description": "login user",
+                "description": "logged-in user",
                 "consumes": [
-                    "application/json",
                     "multipart/form-data"
                 ],
                 "produces": [
@@ -30,27 +29,25 @@
                 "tags": [
                     "accounts"
                 ],
-                "summary": "login user",
+                "summary": "logged-in user",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "identifier: email or member number",
-                        "name": "identifier",
+                        "description": "first name",
+                        "name": "first_name",
                         "in": "formData"
                     },
                     {
                         "type": "string",
-                        "description": "password",
-                        "name": "password",
+                        "description": "last name",
+                        "name": "last_name",
                         "in": "formData"
                     },
                     {
+                        "type": "string",
                         "description": "date of birth",
-                        "name": "jsonData",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/dtos.BasicLoginRequestJSONDTO"
-                        }
+                        "name": "dob",
+                        "in": "formData"
                     },
                     {
                         "type": "file",
@@ -87,10 +84,60 @@
                 }
             }
         },
-        "/me/edit": {
-            "post": {
-                "description": "Update user",
+        "/generate_payment_link": {
+            "get": {
+                "description": "login user",
                 "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "login user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email of registered user",
+                        "name": "email",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/login/basic": {
+            "post": {
+                "description": "login user",
+                "consumes": [
+                    "application/json",
                     "multipart/form-data"
                 ],
                 "produces": [
@@ -99,25 +146,27 @@
                 "tags": [
                     "accounts"
                 ],
-                "summary": "Update user",
+                "summary": "login user",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "first name",
-                        "name": "first_name",
+                        "description": "identifier: email or member number",
+                        "name": "identifier",
                         "in": "formData"
                     },
                     {
                         "type": "string",
-                        "description": "last name",
-                        "name": "last_name",
+                        "description": "password",
+                        "name": "password",
                         "in": "formData"
                     },
                     {
-                        "type": "string",
                         "description": "date of birth",
-                        "name": "dob",
-                        "in": "formData"
+                        "name": "jsonData",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.BasicLoginRequestJSONDTO"
+                        }
                     },
                     {
                         "type": "file",

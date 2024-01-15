@@ -91,6 +91,21 @@ func GetUserByID(id string) (*User, error) {
 	return GetUserEntityFromAccountModel(model), nil
 }
 
+func GetUserByEmail(email string) (*User, error) {
+	model := &models.Account{
+		Email: email,
+	}
+	result := providers.DB.First(model)
+	err := result.Error
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("result.RowsAffected ", result.RowsAffected, email)
+	if result.RowsAffected == 0 {
+		return nil, errors.New("no user found for email " + email)
+	}
+	return GetUserEntityFromAccountModel(model), nil
+}
 func BasicLogin(id *BasicLoginData) (*User, error) {
 	account := &models.Account{}
 	result := providers.DB.

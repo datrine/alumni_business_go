@@ -11,6 +11,7 @@ import (
 	// replace with your own docs folder, usually "github.com/username/reponame/docs"
 	routes "github.com/datrine/alumni_business/Routes"
 	_ "github.com/datrine/alumni_business/docs"
+	_ "github.com/datrine/alumni_business/jobs"
 )
 
 // @title Fiber Example API

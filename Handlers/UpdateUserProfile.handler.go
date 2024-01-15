@@ -22,8 +22,8 @@ type UpdateUserProfileErrorResponse struct {
 
 // Register: Update logged-in user
 //
-//	@Summary      Update user
-//	@Description  Update user
+//	@Summary      logged-in user
+//	@Description  logged-in user
 //	@Tags         accounts
 //	@Accept       mpfd
 //	@Param        first_name formData string   false "first name"
@@ -35,7 +35,7 @@ type UpdateUserProfileErrorResponse struct {
 //	@Failure      400  {object}  UpdateUserProfileErrorResponse
 //	@Failure      404  {object}  UpdateUserProfileErrorResponse
 //	@Failure      500  {object}  UpdateUserProfileErrorResponse
-//	@Router /me/edit [post]
+//	@Router /auth/me/edit [post]
 func UpdateUserProfile(c *fiber.Ctx) error {
 	header := &c.Request().Header
 	if strings.Contains(strings.ToLower(string(header.ContentType())), "multipart/form-data") {
@@ -112,7 +112,7 @@ func UpdateUserProfile(c *fiber.Ctx) error {
 		}
 		return c.Status(fiber.StatusOK).JSON(&UpdateUserProfileSuccessResponse{
 			Message: "Profile updated successfully",
-			Code:    fiber.StatusOK,
+			Status:  fiber.StatusOK,
 			Data: &UpdateUserProfileResponseData{
 				ID:                entityUser.ID,
 				FirstName:         entityUser.FirstName,
@@ -136,6 +136,6 @@ type UpdateUserProfileResponseData struct {
 
 type UpdateUserProfileSuccessResponse struct {
 	Message string                         `json:"message"`
-	Code    int                            `json:"status"`
+	Status  int                            `json:"status"`
 	Data    *UpdateUserProfileResponseData `json:"data"`
 }

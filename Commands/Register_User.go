@@ -16,7 +16,7 @@ type UserEntityWithPaystackLink struct {
 }
 
 func RegisterUser(data *dtos.RegisterUserCommandDTO) (*UserEntityWithPaystackLink, error) {
-	passwordGenerator, err := nanoid.ASCII(10)
+	passwordGenerator, err := nanoid.CustomASCII("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#$&*@", 10)
 	if err != nil {
 		return nil, err
 	}

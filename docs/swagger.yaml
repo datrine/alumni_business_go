@@ -84,6 +84,82 @@ info:
   title: Fiber Example API
   version: "1.0"
 paths:
+  /auth/me/edit:
+    post:
+      consumes:
+      - multipart/form-data
+      description: logged-in user
+      parameters:
+      - description: first name
+        in: formData
+        name: first_name
+        type: string
+      - description: last name
+        in: formData
+        name: last_name
+        type: string
+      - description: date of birth
+        in: formData
+        name: dob
+        type: string
+      - description: profile picture
+        in: formData
+        name: profile_picture
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+      summary: logged-in user
+      tags:
+      - accounts
+  /generate_payment_link:
+    get:
+      consumes:
+      - application/json
+      description: login user
+      parameters:
+      - description: email of registered user
+        in: query
+        name: email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+      summary: login user
+      tags:
+      - accounts
   /login/basic:
     post:
       consumes:
@@ -128,50 +204,6 @@ paths:
           schema:
             $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
       summary: login user
-      tags:
-      - accounts
-  /me/edit:
-    post:
-      consumes:
-      - multipart/form-data
-      description: Update user
-      parameters:
-      - description: first name
-        in: formData
-        name: first_name
-        type: string
-      - description: last name
-        in: formData
-        name: last_name
-        type: string
-      - description: date of birth
-        in: formData
-        name: dob
-        type: string
-      - description: profile picture
-        in: formData
-        name: profile_picture
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handlers.UpdateUserProfileSuccessResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
-      summary: Update user
       tags:
       - accounts
   /users/register:

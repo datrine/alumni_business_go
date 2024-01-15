@@ -2,6 +2,10 @@ package dtos
 
 import "time"
 
+type GeneratePaystackLinkRequestQueryDTO struct {
+	Email string `json:"identifier"`
+}
+
 type BasicLoginRequestJSONDTO struct {
 	Identifier string //`json:"identifier"`
 	Password   string //`json:"password"`
@@ -10,7 +14,6 @@ type BasicLoginRequestJSONDTO struct {
 type RegisterUserRequestJSONDTO struct {
 	MemberNumber string `json:"member_number"`
 	Email        string `json:"email"`
-	Password     string `json:"password"`
 	FirstName    string `json:"first_name"`
 	LastName     string `json:"last_name"`
 }
@@ -18,7 +21,6 @@ type RegisterUserRequestJSONDTO struct {
 type RegisterUserRequestFORMDTO struct {
 	MemberNumber      string `validate:"required"`
 	Email             string `validate:"required"`
-	Password          string `validate:"required"`
 	FirstName         string `validate:"required"`
 	LastName          string `validate:"required"`
 	ProfilePictureUrl string `validate:"required"`
