@@ -40,21 +40,5 @@ func (postToAdd *Post) Post() (*Post, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Post{
-		ID:                model.ID,
-		Email:             model.Email,
-		LastName:          model.LastName,
-		FirstName:         model.FirstName,
-		Profession:        &model.Profession.String,
-		JobTitle:          &model.JobTitle.String,
-		Education:         model.Education,
-		Certifications:    model.Certifications,
-		Employer:          &model.Employer.String,
-		Industry:          &model.Industry.String,
-		Location:          &model.Location.String,
-		Skills:            model.Skills,
-		ProfilePictureUrl: model.ProfilePictureUrl,
-		GraduationYear:    model.GraduationYear,
-		DOB:               &model.DOB.Time,
-	}, nil
+	return nil, nil
 }
