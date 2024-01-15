@@ -95,7 +95,7 @@ func GetUserByEmail(email string) (*User, error) {
 	model := &models.Account{
 		Email: email,
 	}
-	result := providers.DB.First(model)
+	result := providers.DB.Where(model).First(model)
 	err := result.Error
 	if err != nil {
 		return nil, err
@@ -106,11 +106,13 @@ func GetUserByEmail(email string) (*User, error) {
 	}
 	return GetUserEntityFromAccountModel(model), nil
 }
+
 func BasicLogin(id *BasicLoginData) (*User, error) {
+	fmt.Println(id)
 	account := &models.Account{}
 	result := providers.DB.
-		Where(&models.Account{Email: id.Identifier}).
-		Or(&models.Account{MemberNumber: id.Identifier}).First(account)
+		Where(&models.Account{Email: id.Identifier, Password: id.Password}).
+		Or(&models.Account{MemberNumber: id.Identifier, Password: id.Password}).First(account)
 	err := result.Error
 	if err != nil {
 		return nil, err
