@@ -12,6 +12,7 @@ import (
 	_ "github.com/datrine/alumni_business/Job"
 	routes "github.com/datrine/alumni_business/Routes"
 	_ "github.com/datrine/alumni_business/docs"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 // @title Fiber Example API
@@ -26,7 +27,7 @@ import (
 // @BasePath /api
 func main() {
 	app := fiber.New()
-
+	app.Use(cors.New())
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello world!")
 	})
