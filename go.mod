@@ -12,6 +12,7 @@ require (
 	github.com/jaevor/go-nanoid v1.3.0
 	github.com/lib/pq v1.10.9
 	github.com/matcornic/hermes/v2 v2.1.0
+	github.com/resend/resend-go/v2 v2.4.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/xid v1.5.0
 	github.com/subosito/gotenv v1.6.0

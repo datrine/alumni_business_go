@@ -30,6 +30,14 @@ func GetSMTPPort() string {
 	return os.Getenv("SMTP_PORT")
 }
 
+func GetResendAPIKey() string {
+	return os.Getenv("RESEND_API_KEY")
+}
+
+func GetResendFromEmail() string {
+	return os.Getenv("RESEND_FROM_EMAIL")
+}
+
 func GetPaystackSecretKey() string {
 	return os.Getenv("PAYSTACK_SECRET_KEY")
 }

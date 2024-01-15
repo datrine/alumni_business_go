@@ -5,6 +5,7 @@ import (
 
 	dtos "github.com/datrine/alumni_business/Dtos/Command"
 	entities "github.com/datrine/alumni_business/Entities"
+	utils "github.com/datrine/alumni_business/Utils"
 	paystack "github.com/datrine/alumni_business/Utils/Paystack"
 	"github.com/jaevor/go-nanoid"
 	"github.com/matcornic/hermes/v2"
@@ -42,19 +43,22 @@ func RegisterUser(data *dtos.RegisterUserCommandDTO) (*UserEntityWithPaystackLin
 	if err != nil {
 		return nil, err
 	}
-	err = SendEmailHermes(&SendEmailData{Email: data.Email, Message: &hermes.Body{
-		Name:     data.FirstName,
-		Greeting: "Hi",
-		Intros:   []string{"Thank you for your registration"},
-		Actions: []hermes.Action{
-			{
-				Instructions: "Click on the click to pay for your membership",
-				Button: hermes.Button{
-					Link: paystackJSON.Data.AuthorizationUrl,
+	err = utils.SendEmailHermes(&utils.SendEmailData{Email: data.Email,
+		Subject: "Welcome to Alumni App",
+		Message: &hermes.Body{
+			Name:     data.FirstName,
+			Greeting: "Hi",
+			Intros:   []string{"Thank you for your registration"},
+			Actions: []hermes.Action{
+				{
+					Instructions: "Click on the click to pay for your membership",
+					Button: hermes.Button{
+						Link: paystackJSON.Data.AuthorizationUrl,
+						Text: "Pay for your membership",
+					},
 				},
 			},
-		},
-	}})
+		}})
 
 	if err != nil {
 		fmt.Println(err)

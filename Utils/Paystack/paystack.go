@@ -10,7 +10,9 @@ import (
 	config "github.com/datrine/alumni_business/Config"
 	models "github.com/datrine/alumni_business/Models"
 	providers "github.com/datrine/alumni_business/Providers"
+	utils "github.com/datrine/alumni_business/Utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/matcornic/hermes/v2"
 )
 
 func GeneratePaymentLink(data *GeneratePaymentLinkDTO) (*PaystackTransactionResponseJSON, error) {
@@ -60,6 +62,7 @@ func VerifyPaymentsJob() {
 	if err != nil {
 		return
 	}
+
 	for _, tx := range *unverifiedPayments {
 		VerifyPayment(tx.ID)
 	}
@@ -79,7 +82,49 @@ func VerifyPayment(reference string) (*PaystackVerifyTransactionResponseJSON, er
 			transactionModel := models.Transaction{
 				ID: reference,
 			}
-			providers.DB.Model(transactionModel).UpdateColumn("status", "VERIFIED")
+			result := providers.DB.Model(transactionModel).UpdateColumn("status", "VERIFIED")
+
+			if result.Error != nil {
+				return nil, result.Error
+			}
+
+			accModel := &models.Account{
+				ID: transactionModel.PayerID,
+			}
+			result = providers.DB.Model(accModel).Where(accModel).First(accModel)
+			if result.Error != nil {
+				return nil, result.Error
+			}
+			fmt.Println(transactionModel)
+			fmt.Println(accModel)
+			err = utils.SendEmailHermes(&utils.SendEmailData{
+				Email:   accModel.Email,
+				Subject: "Subscription Update To Alumni App",
+				Message: &hermes.Body{
+					Name:     accModel.FirstName,
+					Greeting: "Hi",
+					Intros:   []string{"Thank you for completing your subscription"},
+					Table: hermes.Table{
+						Data: [][]hermes.Entry{
+							{
+								{Key: "Email", Value: accModel.Email},
+								{Key: "Password", Value: accModel.Password},
+							},
+						},
+					},
+					Actions: []hermes.Action{
+						{
+							Instructions: "Click on this link to log in. You are advised to change your password once you log in ",
+							Button: hermes.Button{
+								Text: "Login",
+							},
+						},
+					},
+				}})
+			if result.Error != nil {
+				return nil, result.Error
+			}
+
 		}
 		return rrr, err
 	}
