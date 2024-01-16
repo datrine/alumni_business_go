@@ -23,6 +23,44 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/me": {
+            "get": {
+                "description": "Get my profile",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Get my profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ChangePasswordSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/me/edit": {
             "post": {
                 "description": "logged-in user",
@@ -67,6 +105,58 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/handlers.UpdateUserProfileSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserProfileErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/password/change": {
+            "post": {
+                "description": "change password",
+                "consumes": [
+                    "application/json",
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "change password",
+                "parameters": [
+                    {
+                        "description": "uu",
+                        "name": "jsonChangePaywordData",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.ChangePasswordRequestJSONDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ChangePasswordSuccessResponse"
                         }
                     },
                     "400": {
@@ -173,12 +263,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dtos.BasicLoginRequestJSONDTO"
                         }
-                    },
-                    {
-                        "type": "file",
-                        "description": "profile picture",
-                        "name": "profile_picture",
-                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -295,12 +379,55 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "identifier": {
-                    "description": "` + "`" + `json:\"identifier\"` + "`" + `",
                     "type": "string"
                 },
                 "password": {
-                    "description": "` + "`" + `json:\"password\"` + "`" + `",
                     "type": "string"
+                }
+            }
+        },
+        "dtos.ChangePasswordRequestJSONDTO": {
+            "type": "object",
+            "properties": {
+                "new_password": {
+                    "type": "string"
+                },
+                "old_password": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.ChangePasswordResponseData": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "profile_picture_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.ChangePasswordSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/handlers.ChangePasswordResponseData"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         },

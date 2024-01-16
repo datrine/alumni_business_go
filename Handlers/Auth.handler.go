@@ -9,6 +9,7 @@ import (
 	commands "github.com/datrine/alumni_business/Commands"
 	dtosCommand "github.com/datrine/alumni_business/Dtos/Command"
 	dtosRequest "github.com/datrine/alumni_business/Dtos/Request"
+	queries "github.com/datrine/alumni_business/Queries"
 	utils "github.com/datrine/alumni_business/Utils"
 	"github.com/gofiber/fiber/v2"
 )
@@ -30,7 +31,6 @@ type LoginErrorResponse struct {
 //	@Param        identifier formData string   false "identifier: email or member number"
 //	@Param        password formData string   false "password"
 //	@Param        jsonData body dtosRequest.BasicLoginRequestJSONDTO   false "date of birth"
-//	@Param	   	  profile_picture formData file false "profile picture"
 //	@Produce      json
 //	@Success      200  {object}  UpdateUserProfileSuccessResponse
 //	@Failure      400  {object}  UpdateUserProfileErrorResponse
@@ -88,16 +88,16 @@ func Login(c *fiber.Ctx) error {
 	return errors.New("wrong header field")
 }
 
-// Chnage password
+// Change password
 //
 //	@Summary      change password
 //	@Description  change password
 //	@Tags         accounts
 //	@Accept       json
 //	@Accept       mpfd
-//	@Param        jsonData body dtosRequest.ChangePasswordRequestJSONDTO true ""
+//	@Param        jsonChangePaywordData  body  dtosRequest.ChangePasswordRequestJSONDTO   false   "uu"
 //	@Produce      json
-//	@Success      200  {object}  ChangePasswordResponseDataSuccessResponse
+//	@Success      200  {object}  ChangePasswordSuccessResponse
 //	@Failure      400  {object}  UpdateUserProfileErrorResponse
 //	@Failure      404  {object}  UpdateUserProfileErrorResponse
 //	@Failure      500  {object}  UpdateUserProfileErrorResponse
@@ -158,6 +158,48 @@ func ChangePassword(c *fiber.Ctx) error {
 	return errors.New("wrong header field")
 }
 
+// Change password
+//
+//	@Summary      Get my profile
+//	@Description  Get my profile
+//	@Tags         accounts
+//	@Produce      json
+//	@Success      200  {object}  ChangePasswordSuccessResponse
+//	@Failure      400  {object}  UpdateUserProfileErrorResponse
+//	@Failure      404  {object}  UpdateUserProfileErrorResponse
+//	@Failure      500  {object}  UpdateUserProfileErrorResponse
+//	@Router /auth/me [get]
+func GetMyProfile(c *fiber.Ctx) error {
+	headers := c.GetReqHeaders()
+	authHeaderValue := headers["Authorization"][0]
+	tokenString := strings.Split(authHeaderValue, " ")[1]
+	fmt.Println(tokenString)
+	payload, err := utils.GetAuthPayload(c)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(&RegisterUserErrorResponse{
+			Message: err.Error(),
+			Status:  fiber.StatusBadRequest,
+		})
+	}
+	authUser, err := queries.GetAuthUserByEmail(payload.Email)
+
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(&utils.DefaultErrorResponse{
+			Message: err.Error(),
+			Status:  fiber.StatusUnauthorized,
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(&GetMyProfileSuccessResponse{
+		Message: "My profile",
+		Code:    fiber.StatusOK,
+		Data: &GetMyProfileSuccessResponseData{
+			Token:     tokenString,
+			ID:        authUser.ID,
+			FirstName: authUser.FirstName,
+		},
+	})
+}
+
 type BasicLoginResponseDataSuccessResponse struct {
 	Message string                  `json:"message"`
 	Code    int                     `json:"status"`
@@ -179,6 +221,20 @@ type ChangePasswordSuccessResponse struct {
 }
 
 type ChangePasswordResponseData struct {
+	ID                string `json:"id"`
+	Token             string `json:"access_token"`
+	FirstName         string `json:"first_name"`
+	LastName          string `json:"last_name"`
+	ProfilePictureUrl string `json:"profile_picture_url"`
+}
+
+type GetMyProfileSuccessResponse struct {
+	Message string                           `json:"message"`
+	Code    int                              `json:"status"`
+	Data    *GetMyProfileSuccessResponseData `json:"data"`
+}
+
+type GetMyProfileSuccessResponseData struct {
 	ID                string `json:"id"`
 	Token             string `json:"access_token"`
 	FirstName         string `json:"first_name"`

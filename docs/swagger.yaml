@@ -3,11 +3,38 @@ definitions:
   dtos.BasicLoginRequestJSONDTO:
     properties:
       identifier:
-        description: '`json:"identifier"`'
         type: string
       password:
-        description: '`json:"password"`'
         type: string
+    type: object
+  dtos.ChangePasswordRequestJSONDTO:
+    properties:
+      new_password:
+        type: string
+      old_password:
+        type: string
+    type: object
+  handlers.ChangePasswordResponseData:
+    properties:
+      access_token:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      profile_picture_url:
+        type: string
+    type: object
+  handlers.ChangePasswordSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.ChangePasswordResponseData'
+      message:
+        type: string
+      status:
+        type: integer
     type: object
   handlers.RegisterUserErrorResponse:
     properties:
@@ -84,6 +111,31 @@ info:
   title: Fiber Example API
   version: "1.0"
 paths:
+  /auth/me:
+    get:
+      description: Get my profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ChangePasswordSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+      summary: Get my profile
+      tags:
+      - accounts
   /auth/me/edit:
     post:
       consumes:
@@ -126,6 +178,40 @@ paths:
           schema:
             $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
       summary: logged-in user
+      tags:
+      - accounts
+  /auth/password/change:
+    post:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: change password
+      parameters:
+      - description: uu
+        in: body
+        name: jsonChangePaywordData
+        schema:
+          $ref: '#/definitions/dtos.ChangePasswordRequestJSONDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ChangePasswordSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.UpdateUserProfileErrorResponse'
+      summary: change password
       tags:
       - accounts
   /generate_payment_link:
@@ -180,10 +266,6 @@ paths:
         name: jsonData
         schema:
           $ref: '#/definitions/dtos.BasicLoginRequestJSONDTO'
-      - description: profile picture
-        in: formData
-        name: profile_picture
-        type: file
       produces:
       - application/json
       responses:
