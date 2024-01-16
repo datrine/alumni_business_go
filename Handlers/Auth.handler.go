@@ -88,19 +88,16 @@ func Login(c *fiber.Ctx) error {
 	return errors.New("wrong header field")
 }
 
-// Register: Update logged-in user
+// Chnage password
 //
-//	@Summary      login user
-//	@Description  login user
+//	@Summary      change password
+//	@Description  change password
 //	@Tags         accounts
 //	@Accept       json
 //	@Accept       mpfd
-//	@Param        identifier formData string   false "identifier: email or member number"
-//	@Param        password formData string   false "password"
-//	@Param        jsonData body dtosRequest.ChangePasswordRequestJSONDTO true
-//	@Param	   	  profile_picture formData file false "profile picture"
+//	@Param        jsonData body dtosRequest.ChangePasswordRequestJSONDTO true ""
 //	@Produce      json
-//	@Success      200  {object}  UpdateUserProfileSuccessResponse
+//	@Success      200  {object}  ChangePasswordResponseDataSuccessResponse
 //	@Failure      400  {object}  UpdateUserProfileErrorResponse
 //	@Failure      404  {object}  UpdateUserProfileErrorResponse
 //	@Failure      500  {object}  UpdateUserProfileErrorResponse
@@ -135,7 +132,7 @@ func ChangePassword(c *fiber.Ctx) error {
 				Status:  fiber.StatusBadRequest,
 			})
 		}
-		err = commands.UpdateUserPassword(&dtosCommand.UpdateUserPasswordCommandDTO{
+		authUser, err := commands.UpdateUserPassword(&dtosCommand.UpdateUserPasswordCommandDTO{
 			OldPassword: data.OldPassword,
 			NewPassword: data.NewPassword,
 			Email:       payload.Email,
@@ -148,14 +145,23 @@ func ChangePassword(c *fiber.Ctx) error {
 				Status:  fiber.StatusUnauthorized,
 			})
 		}
-
-		return c.Status(fiber.StatusOK).JSON(&BasicLoginResponseDataSuccessResponse{
+		return c.Status(fiber.StatusOK).JSON(&ChangePasswordSuccessResponse{
 			Message: "Password changed successfully",
 			Code:    fiber.StatusOK,
-			Data:    &BasicLoginResponseData{},
+			Data: &ChangePasswordResponseData{
+				Token:     authUser.Token,
+				ID:        authUser.User.ID,
+				FirstName: authUser.User.FirstName,
+			},
 		})
 	}
 	return errors.New("wrong header field")
+}
+
+type BasicLoginResponseDataSuccessResponse struct {
+	Message string                  `json:"message"`
+	Code    int                     `json:"status"`
+	Data    *BasicLoginResponseData `json:"data"`
 }
 
 type BasicLoginResponseData struct {
@@ -166,8 +172,16 @@ type BasicLoginResponseData struct {
 	ProfilePictureUrl string `json:"profile_picture_url"`
 }
 
-type BasicLoginResponseDataSuccessResponse struct {
-	Message string                  `json:"message"`
-	Code    int                     `json:"status"`
-	Data    *BasicLoginResponseData `json:"data"`
+type ChangePasswordSuccessResponse struct {
+	Message string                      `json:"message"`
+	Code    int                         `json:"status"`
+	Data    *ChangePasswordResponseData `json:"data"`
+}
+
+type ChangePasswordResponseData struct {
+	ID                string `json:"id"`
+	Token             string `json:"access_token"`
+	FirstName         string `json:"first_name"`
+	LastName          string `json:"last_name"`
+	ProfilePictureUrl string `json:"profile_picture_url"`
 }
