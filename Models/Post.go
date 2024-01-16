@@ -10,10 +10,12 @@ import (
 type Post struct {
 	gorm.Model
 	ID          string `gorm:"primaryKey"`
-	AuthorId    string
+	AuthorId    string `gorm:"foreignKey:AuthorId"`
 	Title       string
-	Content     string
-	Comments    []Comment `gorm:"foreignKey:ParentPostId"`
+	Text        string
+	Media       []Media
+	Comments    []Comment    `gorm:"foreignKey:ParentPostId"`
+	Action      []PostAction `gorm:"foreignKey:ID;references:MemberNumber"`
 	ContentType string
 	ActivatedAt sql.NullTime // Uses sql.NullTime for nullable time fields
 	CreatedAt   time.Time    // Automatically managed by GORM for creation time

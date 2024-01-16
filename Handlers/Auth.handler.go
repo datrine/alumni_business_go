@@ -158,22 +158,19 @@ func ChangePassword(c *fiber.Ctx) error {
 	return errors.New("wrong header field")
 }
 
-// Change password
-//
-//	@Summary      Get my profile
-//	@Description  Get my profile
-//	@Tags         accounts
-//	@Produce      json
-//	@Success      200  {object}  ChangePasswordSuccessResponse
-//	@Failure      400  {object}  UpdateUserProfileErrorResponse
-//	@Failure      404  {object}  UpdateUserProfileErrorResponse
-//	@Failure      500  {object}  UpdateUserProfileErrorResponse
-//	@Router /auth/me [get]
+// @Summary      Get my profile
+// @Description  Get my profile
+// @Tags         accounts
+// @Produce      json
+// @Success      200  {object}  ChangePasswordSuccessResponse
+// @Failure      400  {object}  UpdateUserProfileErrorResponse
+// @Failure      404  {object}  UpdateUserProfileErrorResponse
+// @Failure      500  {object}  UpdateUserProfileErrorResponse
+// @Router /auth/me [get]
 func GetMyProfile(c *fiber.Ctx) error {
 	headers := c.GetReqHeaders()
 	authHeaderValue := headers["Authorization"][0]
 	tokenString := strings.Split(authHeaderValue, " ")[1]
-	fmt.Println(tokenString)
 	payload, err := utils.GetAuthPayload(c)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(&RegisterUserErrorResponse{
@@ -196,6 +193,7 @@ func GetMyProfile(c *fiber.Ctx) error {
 			Token:     tokenString,
 			ID:        authUser.ID,
 			FirstName: authUser.FirstName,
+			LastName:  authUser.LastName,
 		},
 	})
 }
