@@ -16,5 +16,6 @@ func Routes(app *fiber.App) fiber.Router {
 	api.Get("/generate_payment_link", handlers.GeneratePaystackLink)
 	authApi := api.Group("/auth", middleware.Auth)
 	authApi.Post("/me/edit", handlers.UpdateUserProfile)
+	authApi.Post("/password/change", handlers.ChangePassword)
 	return api
 }

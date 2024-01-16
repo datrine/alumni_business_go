@@ -7,8 +7,13 @@ type GeneratePaystackLinkRequestQueryDTO struct {
 }
 
 type BasicLoginRequestJSONDTO struct {
-	Identifier string //`json:"identifier"`
-	Password   string //`json:"password"`
+	Identifier string `json:"identifier"`
+	Password   string `json:"password"`
+}
+
+type ChangePasswordRequestJSONDTO struct {
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
 }
 
 type RegisterUserRequestJSONDTO struct {
