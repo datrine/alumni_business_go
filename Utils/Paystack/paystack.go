@@ -53,7 +53,7 @@ func GeneratePaymentLink(data *GeneratePaymentLinkDTO) (*PaystackTransactionResp
 }
 
 func VerifyPaymentsJob() {
-	unverifiedPayments := &[]models.Transaction{}
+	unverifiedPayments := []models.Transaction{}
 	fmt.Println("Running")
 	result := providers.DB.Where(&models.Transaction{
 		Status: "INITIALIZED",
@@ -63,7 +63,7 @@ func VerifyPaymentsJob() {
 		return
 	}
 	fmt.Println(unverifiedPayments)
-	for _, tx := range *unverifiedPayments {
+	for _, tx := range unverifiedPayments {
 		VerifyPayment(tx.ID)
 	}
 }
