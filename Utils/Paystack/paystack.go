@@ -57,7 +57,7 @@ func VerifyPaymentsJob() {
 	fmt.Println("Running")
 	result := providers.DB.Where(&models.Transaction{
 		Status: "INITIALIZED",
-	}).Find(unverifiedPayments)
+	}).Find(&unverifiedPayments)
 	err := result.Error
 	if err != nil {
 		return
