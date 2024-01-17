@@ -62,7 +62,7 @@ func VerifyPaymentsJob() {
 	if err != nil {
 		return
 	}
-
+	fmt.Println(unverifiedPayments)
 	for _, tx := range *unverifiedPayments {
 		VerifyPayment(tx.ID)
 	}
@@ -95,8 +95,8 @@ func VerifyPayment(reference string) (*PaystackVerifyTransactionResponseJSON, er
 			if result.Error != nil {
 				return nil, result.Error
 			}
-			fmt.Println(transactionModel)
-			fmt.Println(accModel)
+			fmt.Println("transactionModel          ", transactionModel)
+			fmt.Println("accModel         ", accModel)
 			err = utils.SendEmailHermes(&utils.SendEmailData{
 				Email:   accModel.Email,
 				Subject: "Subscription Update To Alumni App",
