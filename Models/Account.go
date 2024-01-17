@@ -28,7 +28,7 @@ type Account struct {
 	Approved          bool `gorm:"default:false"`
 	ApprovedBy        *string
 	Role              string
-	Posts             []Post
+	Posts             []Post       `gorm:"foreignKey:AuthorId"`
 	DOB               sql.NullTime // Uses sql.NullTime for nullable time fields
 	ActivatedAt       sql.NullTime // Uses sql.NullTime for nullable time fields
 	CreatedAt         time.Time    // Automatically managed by GORM for creation time

@@ -10,7 +10,7 @@ type Comment struct {
 	gorm.Model
 	ID              string `gorm:"primaryKey"`
 	AuthorId        string
-	ParentPostId    string
+	PostId          string
 	ParentCommentId string
 	Content         string
 	Comments        []Comment `gorm:"foreignkey:ParentCommentId"`
