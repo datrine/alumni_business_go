@@ -82,21 +82,27 @@ func VerifyPayment(reference string) (*PaystackVerifyTransactionResponseJSON, er
 			transactionModel := models.Transaction{
 				ID: reference,
 			}
-			result := providers.DB.Model(transactionModel).UpdateColumn("status", "VERIFIED")
+			result := providers.DB.Model(transactionModel).
+				UpdateColumn("status", "VERIFIED").First(&transactionModel)
 
 			if result.Error != nil {
+				fmt.Println("first:           ", err.Error())
 				return nil, result.Error
 			}
 
+			fmt.Println()
 			accModel := &models.Account{
 				ID: transactionModel.PayerID,
 			}
+
 			result = providers.DB.Model(accModel).Where(accModel).First(accModel)
 			if result.Error != nil {
+				fmt.Println("second:        ", err.Error())
 				return nil, result.Error
 			}
-			fmt.Println("transactionModel          ", transactionModel)
-			fmt.Println("accModel         ", accModel)
+
+			fmt.Println("transactionModel          ", transactionModel, "\n")
+			fmt.Println("accModel         ", accModel, "\n")
 			err = utils.SendEmailHermes(&utils.SendEmailData{
 				Email:   accModel.Email,
 				Subject: "Subscription Update To Alumni App",
@@ -121,7 +127,8 @@ func VerifyPayment(reference string) (*PaystackVerifyTransactionResponseJSON, er
 						},
 					},
 				}})
-			if result.Error != nil {
+			if err != nil {
+				fmt.Println("third:      ", err.Error())
 				return nil, result.Error
 			}
 

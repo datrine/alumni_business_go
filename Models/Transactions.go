@@ -19,3 +19,14 @@ type Transaction struct {
 	CreatedAt  time.Time // Automatically managed by GORM for creation time
 	UpdatedAt  time.Time // Automatically managed by GORM for update time
 }
+
+func (transaction *Transaction) AfterSave(tx *gorm.DB) (err error) {
+	if transaction.Status == "VERIFIED" {
+		accModel := &Account{
+			ID: transaction.PayerID,
+		}
+		accModel.Has_Subscribed = true
+		tx.Save(&accModel)
+	}
+	return
+}
