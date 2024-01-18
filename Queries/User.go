@@ -10,7 +10,7 @@ func GetAuthUserByEmail(email string) (*entities.User, error) {
 	model := &models.Account{
 		Email: email,
 	}
-	result := providers.DB.Model(model).First(model)
+	result := providers.DB.Model(model).Where(model).First(model)
 	if result.Error != nil {
 		return nil, result.Error
 	}

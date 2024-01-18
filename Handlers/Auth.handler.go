@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	commands "github.com/datrine/alumni_business/Commands"
 	dtosCommand "github.com/datrine/alumni_business/Dtos/Command"
@@ -190,10 +191,12 @@ func GetMyProfile(c *fiber.Ctx) error {
 		Message: "My profile",
 		Code:    fiber.StatusOK,
 		Data: &GetMyProfileSuccessResponseData{
-			Token:     tokenString,
-			ID:        authUser.ID,
-			FirstName: authUser.FirstName,
-			LastName:  authUser.LastName,
+			Token:             tokenString,
+			ID:                authUser.ID,
+			FirstName:         authUser.FirstName,
+			LastName:          authUser.LastName,
+			ProfilePictureUrl: authUser.ProfilePictureUrl,
+			DOB:               authUser.DOB,
 		},
 	})
 }
@@ -233,9 +236,10 @@ type GetMyProfileSuccessResponse struct {
 }
 
 type GetMyProfileSuccessResponseData struct {
-	ID                string `json:"id"`
-	Token             string `json:"access_token"`
-	FirstName         string `json:"first_name"`
-	LastName          string `json:"last_name"`
-	ProfilePictureUrl string `json:"profile_picture_url"`
+	ID                string     `json:"id"`
+	Token             string     `json:"access_token"`
+	FirstName         string     `json:"first_name"`
+	LastName          string     `json:"last_name"`
+	ProfilePictureUrl string     `json:"profile_picture_url"`
+	DOB               *time.Time `json:"dob"`
 }
