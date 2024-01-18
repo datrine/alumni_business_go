@@ -61,6 +61,7 @@ func (userToAdd *User) Register() error {
 func GetUserEntityFromAccountModel(model *models.Account) *User {
 	return &User{
 		ID:                model.ID,
+		MemberNumber:      model.MemberNumber,
 		Email:             model.Email,
 		LastName:          model.LastName,
 		FirstName:         model.FirstName,
