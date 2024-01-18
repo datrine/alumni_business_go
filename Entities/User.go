@@ -126,7 +126,7 @@ func (userToAdd *User) UpdateUserProfile(data *dtos.UpdateUserProfileCommandData
 		ID: id,
 	}
 	fmt.Println("\n", data, "\n")
-	result := providers.DB.Model(account).
+	result := providers.DB.Model(account).Where(account).
 		Omit("id", "email", "password", "member_number").
 		Updates(models.Account{
 			LastName:   data.LastName,

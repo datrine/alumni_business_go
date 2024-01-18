@@ -239,6 +239,7 @@ type GetMyProfileSuccessResponseData struct {
 	ID                string     `json:"id"`
 	Token             string     `json:"access_token"`
 	FirstName         string     `json:"first_name"`
+	Email             string     `json:"email"`
 	LastName          string     `json:"last_name"`
 	ProfilePictureUrl string     `json:"profile_picture_url"`
 	DOB               *time.Time `json:"dob"`
