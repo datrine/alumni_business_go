@@ -10,7 +10,7 @@ func UpdateUserProfile(data *dtos.UpdateUserProfileCommandData) (*entities.User,
 	if err != nil {
 		return nil, err
 	}
-	println(user)
+
 	return user.UpdateUserProfile(&dtos.UpdateUserProfileCommandData{
 		ID:                data.ID,
 		FirstName:         data.FirstName,

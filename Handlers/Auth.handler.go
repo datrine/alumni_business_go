@@ -127,6 +127,7 @@ func ChangePassword(c *fiber.Ctx) error {
 			})
 		}
 		payload, err := utils.GetAuthPayload(c)
+		fmt.Println(payload)
 		if err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(&RegisterUserErrorResponse{
 				Message: err.Error(),

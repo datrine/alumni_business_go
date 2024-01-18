@@ -110,6 +110,7 @@ func UpdateUserProfile(c *fiber.Ctx) error {
 				Status:  fiber.StatusBadGateway,
 			})
 		}
+		fmt.Println(entityUser)
 		return c.Status(fiber.StatusOK).JSON(&UpdateUserProfileSuccessResponse{
 			Message: "Profile updated successfully",
 			Status:  fiber.StatusOK,

@@ -84,7 +84,7 @@ func GetUserByID(id string) (*User, error) {
 	model := &models.Account{
 		ID: id,
 	}
-	result := providers.DB.Model(model).Where(model).First(model)
+	result := providers.DB.Model(model).First(model)
 	err := result.Error
 	if err != nil {
 		return nil, err
@@ -126,8 +126,8 @@ func (userToAdd *User) UpdateUserProfile(data *dtos.UpdateUserProfileCommandData
 	account := &models.Account{
 		ID: id,
 	}
-	fmt.Println("\n", data, "\n")
-	result := providers.DB.Model(account).Where(account).
+
+	result := providers.DB.Model(account).
 		Omit("id", "email", "password", "member_number").
 		Updates(models.Account{
 			LastName:   data.LastName,
@@ -139,7 +139,8 @@ func (userToAdd *User) UpdateUserProfile(data *dtos.UpdateUserProfileCommandData
 	if err != nil {
 		return nil, err
 	}
-
+	result.First(account)
+	fmt.Println(account)
 	return GetUserEntityFromAccountModel(account), nil
 }
 
