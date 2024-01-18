@@ -54,7 +54,6 @@ func GeneratePaymentLink(data *GeneratePaymentLinkDTO) (*PaystackTransactionResp
 
 func VerifyPaymentsJob() {
 	unverifiedPayments := []models.Transaction{}
-	fmt.Println("Running")
 	result := providers.DB.Where(&models.Transaction{
 		Status: "INITIALIZED",
 	}).Find(&unverifiedPayments)
@@ -62,7 +61,7 @@ func VerifyPaymentsJob() {
 	if err != nil {
 		return
 	}
-	fmt.Println(unverifiedPayments)
+	//fmt.Println(unverifiedPayments)
 	for _, tx := range unverifiedPayments {
 		VerifyPayment(tx.ID)
 	}
@@ -89,20 +88,18 @@ func VerifyPayment(reference string) (*PaystackVerifyTransactionResponseJSON, er
 				fmt.Println("first:           ", err.Error())
 				return nil, result.Error
 			}
-
-			fmt.Println()
 			accModel := &models.Account{
 				ID: transactionModel.PayerID,
 			}
 
 			result = providers.DB.Model(accModel).Where(accModel).First(accModel)
 			if result.Error != nil {
-				fmt.Println("second:        ", err.Error())
+				//fmt.Println("second:        ", err.Error())
 				return nil, result.Error
 			}
 
-			fmt.Println("transactionModel          ", transactionModel, "\n")
-			fmt.Println("accModel         ", accModel, "\n")
+			//fmt.Println("transactionModel          ", transactionModel, "\n")
+			//fmt.Println("accModel         ", accModel, "\n")
 			err = utils.SendEmailHermes(&utils.SendEmailData{
 				Email:   accModel.Email,
 				Subject: "Subscription Update To Alumni App",

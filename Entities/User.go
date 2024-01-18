@@ -83,7 +83,7 @@ func GetUserByID(id string) (*User, error) {
 	model := &models.Account{
 		ID: id,
 	}
-	result := providers.DB.First(model)
+	result := providers.DB.Model(model).Where(model).First(model)
 	err := result.Error
 	if err != nil {
 		return nil, err
@@ -147,7 +147,7 @@ func (userToAdd *User) UpdateUserPassword(data *dtos.UpdateUserPasswordCommandDT
 		Email: data.Email,
 	}
 
-	result := providers.DB.Model(accountModel).Updates(models.Account{Password: data.NewPassword})
+	result := providers.DB.Model(accountModel).Where(accountModel).Updates(models.Account{Password: data.NewPassword})
 
 	affectedRows := result.RowsAffected
 	if affectedRows == 0 {

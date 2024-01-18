@@ -9,10 +9,9 @@ import (
 
 func init() {
 	c := cron.New()
-	id, err := c.AddFunc("* * * * * ", paystack.VerifyPaymentsJob)
+	_, err := c.AddFunc("* * * * * ", paystack.VerifyPaymentsJob)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	fmt.Println(id)
 	c.Start()
 }

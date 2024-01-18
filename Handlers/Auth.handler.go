@@ -150,9 +150,11 @@ func ChangePassword(c *fiber.Ctx) error {
 			Message: "Password changed successfully",
 			Code:    fiber.StatusOK,
 			Data: &ChangePasswordResponseData{
-				Token:     authUser.Token,
-				ID:        authUser.User.ID,
-				FirstName: authUser.User.FirstName,
+				Token:             authUser.Token,
+				ID:                authUser.User.ID,
+				FirstName:         authUser.User.FirstName,
+				LastName:          authUser.User.LastName,
+				ProfilePictureUrl: authUser.User.ProfilePictureUrl,
 			},
 		})
 	}
@@ -197,6 +199,8 @@ func GetMyProfile(c *fiber.Ctx) error {
 			LastName:          authUser.LastName,
 			ProfilePictureUrl: authUser.ProfilePictureUrl,
 			DOB:               authUser.DOB,
+			Email:             authUser.Email,
+			MemberNumber:      authUser.MemberNumber,
 		},
 	})
 }
@@ -243,4 +247,5 @@ type GetMyProfileSuccessResponseData struct {
 	LastName          string     `json:"last_name"`
 	ProfilePictureUrl string     `json:"profile_picture_url"`
 	DOB               *time.Time `json:"dob"`
+	MemberNumber      string     `json:"member_number"`
 }
