@@ -36,6 +36,28 @@ definitions:
       status:
         type: integer
     type: object
+  handlers.CreatePostErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  handlers.CreatePostResponseData:
+    properties:
+      post_author_id:
+        type: string
+      post_id:
+        type: string
+      post_media:
+        type: string
+      post_text:
+        type: string
+      post_title:
+        type: string
+      post_type:
+        type: string
+    type: object
   handlers.RegisterUserErrorResponse:
     properties:
       message:
@@ -288,6 +310,54 @@ paths:
       summary: login user
       tags:
       - accounts
+  /posts:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create  new post
+      parameters:
+      - description: member number
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: type of post
+        in: formData
+        name: type_of_post
+        required: true
+        type: string
+      - description: text
+        in: formData
+        name: text
+        required: true
+        type: string
+      - description: profile picture
+        in: formData
+        name: profile_picture
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.CreatePostResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.CreatePostErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.CreatePostErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.CreatePostErrorResponse'
+      summary: Create  new post
+      tags:
+      - posts
   /users/register:
     post:
       consumes:

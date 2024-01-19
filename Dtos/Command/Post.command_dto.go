@@ -1,14 +1,20 @@
 package dtos
 
+type GetPostsDTO struct {
+	ID      string
+	Filters map[string]string
+}
+
 type WritePost struct {
 	ID       string
 	AuthorId string
 	Title    string
+	Type     string
 	Text     string
 	Media    []Media
 }
 
-type EditPost struct {
+type EditPostDTO struct {
 	ID       string
 	AuthorId string
 	PostId   string
@@ -20,4 +26,5 @@ type EditPost struct {
 type Media struct {
 	URL  string
 	Type string
+	Name string
 }

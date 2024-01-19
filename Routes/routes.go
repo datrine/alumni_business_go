@@ -18,5 +18,7 @@ func Routes(app *fiber.App) fiber.Router {
 	authApi.Post("/me/edit", handlers.UpdateUserProfile)
 	authApi.Get("/me", handlers.GetMyProfile)
 	authApi.Post("/password/change", handlers.ChangePassword)
+	postsApi := api.Group("/posts")
+	postsApi.Post("/", middleware.Auth, handlers.CreatePost)
 	return api
 }
