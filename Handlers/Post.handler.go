@@ -20,6 +20,50 @@ type EditPostErrorResponse struct {
 	Message string
 }
 
+// DeletePosts: Delete post
+//
+//	@Summary      fetch post
+//	@Description  fetch post
+//	@Tags         posts
+//	@Produce      json
+//	@Success      200  {object}  EditPostSuccessResponse
+//	@Failure      400  {object}  EditPostErrorResponse
+//	@Failure      404  {object}  EditPostErrorResponse
+//	@Failure      500  {object}  EditPostErrorResponse
+//	@Router /posts/:id [delete]
+func DeletePost(c *fiber.Ctx) error {
+	postId := c.Query("id")
+	payload, err := utils.GetAuthPayload(c)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(&CreatePostErrorResponse{
+			Message: err.Error(),
+			Status:  fiber.StatusBadRequest,
+		})
+	}
+	postVTO, err := commands.DeletePost(&dtosCommand.DeletePostDTO{
+		PostID:   postId,
+		AuthorId: payload.ID,
+	})
+	if err != nil {
+		return c.Status(fiber.StatusBadGateway).JSON(&CreatePostErrorResponse{
+			Message: err.Error(),
+			Status:  fiber.StatusBadRequest,
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(&DeletePostSuccessResponse{
+		Message: "Posts fetched successfully",
+		Status:  fiber.StatusOK,
+		Data: &DeletePostResponseData{
+			PostID:       postVTO.ID,
+			PostText:     postVTO.Text,
+			PostTitle:    postVTO.Title,
+			PostType:     postVTO.ContentType,
+			PostAuthorId: postVTO.AuthorId,
+		},
+	})
+
+}
+
 // GetPosts: Fetch posts
 //
 //	@Summary      fetch post
@@ -309,6 +353,21 @@ type FetchPostsSuccessResponse struct {
 }
 
 type FetchPostsResponseData struct {
+	PostID       string `json:"post_id"`
+	PostText     string `json:"post_text"`
+	PostTitle    string `json:"post_title"`
+	PostMedia    string `json:"post_media"`
+	PostType     string `json:"post_type"`
+	PostAuthorId string `json:"post_author_id"`
+}
+
+type DeletePostSuccessResponse struct {
+	Message string                  `json:"message"`
+	Status  int                     `json:"status"`
+	Data    *DeletePostResponseData `json:"data"`
+}
+
+type DeletePostResponseData struct {
 	PostID       string `json:"post_id"`
 	PostText     string `json:"post_text"`
 	PostTitle    string `json:"post_title"`
