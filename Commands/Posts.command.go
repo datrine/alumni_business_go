@@ -31,11 +31,12 @@ func WritePost(data *dtos.WritePost) (*models.Post, error) {
 	}
 	postId := passwordGenerator()
 	postModel := &models.Post{
-		ID:       postId,
-		AuthorId: data.AuthorId,
-		Title:    data.Title,
-		Media:    mediaModels,
-		Text:     data.Text,
+		ID:          postId,
+		AuthorId:    data.AuthorId,
+		Title:       data.Title,
+		Media:       mediaModels,
+		Text:        data.Text,
+		ContentType: data.Type,
 	}
 
 	result := providers.DB.Create(postModel)
@@ -55,26 +56,26 @@ func EditPost(data *dtos.EditPostDTO) (*models.Post, error) {
 	}
 	findPostModel := &models.Post{
 		AuthorId: data.AuthorId,
-		ID:       data.PostId,
+		ID:       data.PostID,
 	}
-	postModel := &models.Post{
-		AuthorId: data.AuthorId,
-		Title:    data.Title,
-		Media:    mediaModels,
-		Text:     data.Text,
+	updateModel := &models.Post{
+		Title:       data.Title,
+		Media:       mediaModels,
+		Text:        data.Text,
+		ContentType: data.Type,
 	}
 
-	result := providers.DB.Model(findPostModel).Updates(postModel)
+	result := providers.DB.Model(findPostModel).Updates(updateModel).First(findPostModel)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return postModel, nil
+	return findPostModel, nil
 }
 
-func DeletePost(data *dtos.EditPostDTO) (*models.Post, error) {
+func DeletePost(data *dtos.DeletePostDTO) (*models.Post, error) {
 	findPostModel := &models.Post{
 		AuthorId: data.AuthorId,
-		ID:       data.PostId,
+		ID:       data.PostID,
 	}
 
 	result := providers.DB.Model(findPostModel).First(findPostModel).Delete(findPostModel)

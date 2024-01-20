@@ -294,6 +294,50 @@ const docTemplate = `{
             }
         },
         "/posts": {
+            "get": {
+                "description": "fetch post",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "fetch post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "asc",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditPostSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditPostErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditPostErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditPostErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create  new post",
                 "consumes": [
@@ -340,7 +384,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.CreatePostResponseData"
+                            "$ref": "#/definitions/handlers.CreatePostSuccessResponse"
                         }
                     },
                     "400": {
@@ -359,6 +403,77 @@ const docTemplate = `{
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/handlers.CreatePostErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/posts/:id": {
+            "put": {
+                "description": "Edit post",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Edit post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "type of post",
+                        "name": "type_of_post",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "text",
+                        "name": "text",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "file"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "profile picture",
+                        "name": "profile_picture",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditPostSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditPostErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditPostErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditPostErrorResponse"
                         }
                     }
                 }
@@ -533,6 +648,68 @@ const docTemplate = `{
                 },
                 "post_type": {
                     "type": "string"
+                }
+            }
+        },
+        "handlers.CreatePostSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/handlers.CreatePostResponseData"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "handlers.EditPostErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "handlers.EditPostResponseData": {
+            "type": "object",
+            "properties": {
+                "post_author_id": {
+                    "type": "string"
+                },
+                "post_id": {
+                    "type": "string"
+                },
+                "post_media": {
+                    "type": "string"
+                },
+                "post_text": {
+                    "type": "string"
+                },
+                "post_title": {
+                    "type": "string"
+                },
+                "post_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.EditPostSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/handlers.EditPostResponseData"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         },

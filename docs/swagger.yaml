@@ -58,6 +58,46 @@ definitions:
       post_type:
         type: string
     type: object
+  handlers.CreatePostSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.CreatePostResponseData'
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  handlers.EditPostErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  handlers.EditPostResponseData:
+    properties:
+      post_author_id:
+        type: string
+      post_id:
+        type: string
+      post_media:
+        type: string
+      post_text:
+        type: string
+      post_title:
+        type: string
+      post_type:
+        type: string
+    type: object
+  handlers.EditPostSuccessResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.EditPostResponseData'
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
   handlers.RegisterUserErrorResponse:
     properties:
       message:
@@ -311,6 +351,35 @@ paths:
       tags:
       - accounts
   /posts:
+    get:
+      description: fetch post
+      parameters:
+      - description: asc
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.EditPostSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.EditPostErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.EditPostErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.EditPostErrorResponse'
+      summary: fetch post
+      tags:
+      - posts
     post:
       consumes:
       - multipart/form-data
@@ -342,7 +411,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.CreatePostResponseData'
+            $ref: '#/definitions/handlers.CreatePostSuccessResponse'
         "400":
           description: Bad Request
           schema:
@@ -356,6 +425,53 @@ paths:
           schema:
             $ref: '#/definitions/handlers.CreatePostErrorResponse'
       summary: Create  new post
+      tags:
+      - posts
+  /posts/:id:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Edit post
+      parameters:
+      - description: title
+        in: formData
+        name: title
+        type: string
+      - description: type of post
+        in: formData
+        name: type_of_post
+        type: string
+      - description: text
+        in: formData
+        name: text
+        type: string
+      - collectionFormat: csv
+        description: profile picture
+        in: formData
+        items:
+          type: file
+        name: profile_picture
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.EditPostSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.EditPostErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.EditPostErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.EditPostErrorResponse'
+      summary: Edit post
       tags:
       - posts
   /users/register:

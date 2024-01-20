@@ -15,14 +15,18 @@ type WritePost struct {
 }
 
 type EditPostDTO struct {
-	ID       string
 	AuthorId string
-	PostId   string
+	PostID   string
 	Title    string
 	Text     string
+	Type     string
 	Media    []Media
 }
 
+type DeletePostDTO struct {
+	AuthorId string
+	PostID   string
+}
 type Media struct {
 	URL  string
 	Type string

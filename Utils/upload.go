@@ -19,7 +19,7 @@ func UploadFile(profilePictureFile *multipart.FileHeader) (string, error) {
 	uploadResult, err := cld.Upload.Upload(
 		ctx, profilePictureFile,
 		uploader.UploadParams{PublicID: "models",
-			UniqueFilename: api.Bool(false),
+			UniqueFilename: api.Bool(true),
 			Overwrite:      api.Bool(true)})
 	if err != nil {
 		log.Fatalf("Failed to upload file, %v\n", err)
