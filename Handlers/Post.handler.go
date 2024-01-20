@@ -51,7 +51,7 @@ func DeletePost(c *fiber.Ctx) error {
 		})
 	}
 	return c.Status(fiber.StatusOK).JSON(&DeletePostSuccessResponse{
-		Message: "Posts fetched successfully",
+		Message: "Posts deleted successfully",
 		Status:  fiber.StatusOK,
 		Data: &DeletePostResponseData{
 			PostID:       postVTO.ID,
