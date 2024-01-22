@@ -21,6 +21,7 @@ func Routes(app *fiber.App) fiber.Router {
 	postsApi := api.Group("/posts")
 	postsApi.Post("/", middleware.Auth, handlers.CreatePost)
 	postsApi.Put("/:id", middleware.Auth, handlers.EditPost)
+	postsApi.Delete("/:id", middleware.Auth, handlers.DeletePost)
 	postsApi.Get("/", handlers.GetPosts)
 	return api
 }
